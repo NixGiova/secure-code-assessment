@@ -13,8 +13,6 @@ import com.vaadin.flow.router.Route;
 import lombok.extern.slf4j.Slf4j;
 import tech.codestrux.sca.models.Quiz;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -35,7 +33,7 @@ public class ResultView extends VerticalLayout {
         Span content = new Span();
         content.addClassName("content");
         content.add(createHeaders());
-        quiz.getCorrectAnswers().forEach((key, value) -> content.add(createRows(key, value, quiz.getAnswers())));
+        quiz.getCorrectAnswers().forEach((key, value) -> content.add(createRows(key, value, quiz.getAnswers().get(key))));
         add(content);
 
         Button button = new Button("Finalizar", e -> {
@@ -62,13 +60,13 @@ public class ResultView extends VerticalLayout {
         return span;
     }
 
-    public Component createRows(Integer key, String value, Map<Integer, String> userAnswers){
+    public Component createRows(Integer key, String answer, String userAnswer){
         Span span = new Span();
         span.addClassName("span-answers");
-        Paragraph pCorrectAnswer = new Paragraph(value);
-        Paragraph pUserAnswer = new Paragraph(value);
+        Paragraph pCorrectAnswer = new Paragraph(answer);
+        Paragraph pUserAnswer = new Paragraph(userAnswer);
         pCorrectAnswer.addClassName("answer-1");
-        pUserAnswer.addClassName(value.equalsIgnoreCase(userAnswers.get(key)) ? "answer-1" : "answer-2");
+        pUserAnswer.addClassName(answer.equalsIgnoreCase(userAnswer) ? "answer-1" : "answer-2");
         span.add(new Paragraph(key.toString()+ ")"));
         span.add(pCorrectAnswer);
         span.add(pUserAnswer);

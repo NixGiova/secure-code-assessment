@@ -23,6 +23,7 @@ public class MainView extends VerticalLayout {
 
     public MainView(Quiz quiz) {
         quiz.getAnswers().clear();
+        quiz.setName(null);
         add(new H1("SCA"));
         add(new Paragraph("ETC - Iniciemos con el test de ciberseguridad ..."));
         TextField nombre = new TextField("Cuál es tu nombre?");

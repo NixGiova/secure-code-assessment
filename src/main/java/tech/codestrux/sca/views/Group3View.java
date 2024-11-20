@@ -9,10 +9,10 @@ import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.PreserveOnRefresh;
 import com.vaadin.flow.router.Route;
-import org.springframework.beans.factory.annotation.Autowired;
 import tech.codestrux.sca.models.Quiz;
 
 
@@ -60,6 +60,18 @@ public class Group3View extends VerticalLayout {
             radioGroupQ8.setValue(quiz.getAnswers().get(8));
             radioGroupQ9.setValue(quiz.getAnswers().get(9));
         }
+
+        Binder<Quiz> binder = new Binder<>(Quiz.class);
+        binder.forField(radioGroupQ7)
+                .asRequired("")
+                .bind(q -> quiz.getAnswers().get(7), (q, v) -> quiz.getAnswers().put(7, v));
+        binder.forField(radioGroupQ8)
+                .asRequired("")
+                .bind(q -> quiz.getAnswers().get(8), (q, v) -> quiz.getAnswers().put(8, v));
+        binder.forField(radioGroupQ9)
+                .asRequired("")
+                .bind(q -> quiz.getAnswers().get(9), (q, v) -> quiz.getAnswers().put(9, v));
+
         Button button = new Button("siguiente", e -> {
             if (quiz != null) {
                 quiz.getAnswers().put(7, radioGroupQ7.getValue());
@@ -70,6 +82,8 @@ public class Group3View extends VerticalLayout {
         });
         button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         button.addClickShortcut(Key.ENTER);
+        button.setEnabled(false);
+        binder.addStatusChangeListener(event -> button.setEnabled(binder.isValid()));
         add(button);
         addClassName("wider-content");
     }
